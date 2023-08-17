@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<style>
+  body {
+    padding: 20px;
+  }
+  
+  .product-card {
+    border: 1px solid #481212;
+    padding: 15px;
+    margin-bottom: 20px;
+    background-color: #fcfcfd;
+  }
+  
+  .selected-products {
+    font-weight: bold;
+    margin-top: 20px;
+  }
+</style>
+<title>Shopping Cart</title>
+</head>
+<body>
+<div class="container">
+  <div class="row">
+    <div class="col-md-4">
+      <div class="product-card">
+        <img src="casque.jpg" alt="Product 1" class="img-fluid">
+        <p>Product 1</p>
+        <p>$10.00</p>
+        <button class="btn btn-primary add-to-cart" data-name="Product 1" data-price="10.00">Add to Cart</button>
+      </div>
+    </div>
+  
+    <div class="col-md-4  ">
+      <div class="product-card">
+        
+        <img src="souris.jpg" alt="Product 2" class="img-fluid">
+        <p>Product 2</p>
+        <p>$15.00</p>
+        <button class="btn btn-primary add-to-cart" data-name="Product 2" data-price="15.00">Add to Cart</button>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="product-card">
+        <img src="clavier.jpg" alt="Product 3" class="img-fluid">
+        <p>Product 3</p>
+        <p>$20.00</p>
+        <button class="btn btn-primary add-to-cart" data-name="product 3" data-price="20.00">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="selected-products">
+        <p>Selected Products:</p>
+        <ul id="cart-list"></ul>
+        <p>Total Price: <span id="total-price">$0.00</span></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+ //partiejs// 
+  document.addEventListener("DOMContentLoaded", function() {
+    let cart = [];
+
+    const addToCartButtons = document.querySelectorAll(".add-to-cart");
+    addToCartButtons.forEach(function(button) {
+      button.addEventListener("click", function() {
+        const productName = button.getAttribute("data-name");
+        const productPrice = parseFloat(button.getAttribute("data-price"));
+        cart.push({ name: productName, price: productPrice });
+
+        updateCart();
+      });
+    });
+//remove buttons
+    document.addEventListener("click", function(event) {
+      if (event.target.classList.contains("remove-from-cart")) {
+        const index = parseInt(event.target.getAttribute("data-index"));
+        cart.splice(index, 1);
+        updateCart();
+      }
+    });
+
+    function updateCart() {
+      const cartListElement = document.getElementById("cart-list");
+      const totalPriceElement = document.getElementById("total-price");
+      let cartList = "";
+      let totalPrice = 0;
+
+      cart.forEach(function(item, index) {
+        cartList += `<li>${item.name} - $${item.price.toFixed(2)} <button class="btn btn-sm btn-danger remove-from-cart" data-index="${index}">Remove</button></li>`;
+        totalPrice += item.price;
+      });
+
+      cartListElement.innerHTML = cartList;
+      totalPriceElement.textContent = "$" + totalPrice.toFixed(2);
+    }
+  });
+</script>
+
+</html>
